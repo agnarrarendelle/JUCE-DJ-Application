@@ -45,11 +45,10 @@ private:
 
     juce::MixerAudioSource mixerSource;
 
-    PlaylistComponent playlistComponent;
+    PlaylistComponent playlistComponent{formatManager};
 
     double gain;
     bool isPlaying;
-
 
 
 
