@@ -13,16 +13,19 @@
 #include <JuceHeader.h>
 #include <vector>
 #include <string>
+#include <set>
+#include <map>
 
 //==============================================================================
 /*
 */
 class PlaylistComponent : public juce::Component,
                           public juce::TableListBoxModel,
-                          public juce::Button::Listener
+                          public juce::Button::Listener,
+                          public juce::FileDragAndDropTarget
 {
 public:
-    PlaylistComponent();
+    PlaylistComponent(juce::AudioFormatManager&);
     ~PlaylistComponent() override;
 
     void paint (juce::Graphics&) override;
@@ -56,10 +59,17 @@ public:
 
     void buttonClicked(juce::Button*) override;
 
+    bool isInterestedInFileDrag (const juce::StringArray &files) override;
+    void filesDropped (const juce::StringArray &files, int x, int y) override;
+
 
 private:
-
+    juce::AudioFormatManager& formatManager;
     juce::TableListBox tableComponent;
     std::vector<std::string> trackTitles;
+    std::set<juce::File> allTracks;
+    std::map<std::string, juce::File> fileStatus;
+
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PlaylistComponent)
 };

@@ -12,17 +12,16 @@
 #include "PlaylistComponent.h"
 
 //==============================================================================
-PlaylistComponent::PlaylistComponent()
+PlaylistComponent::PlaylistComponent(juce::AudioFormatManager& _formatManager):
+formatManager(_formatManager)
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
-    trackTitles.push_back("Track 1");
-    trackTitles.push_back("Track 2");
-    trackTitles.push_back("Track 3");
-    trackTitles.push_back("Track 4");
+
 
     tableComponent.getHeader().addColumn("Track Name", 1, 400);
-    tableComponent.getHeader().addColumn("", 2, 200);
+    tableComponent.getHeader().addColumn("Track Type", 2, 200);
+    tableComponent.getHeader().addColumn("", 3, 200);
 
     tableComponent.setModel(this);
 
@@ -88,16 +87,34 @@ void PlaylistComponent::paintCell(
         bool rowIsSelected
 )
 {
-    if(columnId == 1){
 
-        g.drawText(trackTitles[rowNumber],
-                   2,
-                   0,
-                   width-4,
-                   height,
-                   juce::Justification::centredLeft, true
-        );
-    }
+    switch (columnId) {
+        case 1:{
+            g.drawText(trackTitles[rowNumber],
+                       2,
+                       0,
+                       width-4,
+                       height,
+                       juce::Justification::centredLeft, true
+            );
+            break;
+        }
+        case 2:{
+            juce::File fileInfo = fileStatus.at(trackTitles[rowNumber]);
+            g.drawText(fileInfo.getFileExtension(),
+                       2,
+                       0,
+                       width-4,
+                       height,
+                       juce::Justification::centredLeft, true
+            );
+            break;
+        }
+        default:{
+            break;
+        }
+    };
+
 }
 
 juce::Component *PlaylistComponent::refreshComponentForCell(
@@ -107,7 +124,7 @@ juce::Component *PlaylistComponent::refreshComponentForCell(
         juce::Component *existingComponentToUpdate
 )
 {
-    if(columnId == 2){
+    if(columnId == 3){
         if(existingComponentToUpdate == nullptr){
             juce::TextButton* btn = new juce::TextButton{"play"};
             juce::String id{std::to_string(rowNumber)};
@@ -125,6 +142,33 @@ juce::Component *PlaylistComponent::refreshComponentForCell(
 void PlaylistComponent::buttonClicked(juce::Button* button) {
     int id = std::stoi(button->getComponentID().toStdString());
     std::cout<<"button clicked "<< trackTitles[id] <<std::endl;
+
 }
 
+bool PlaylistComponent::isInterestedInFileDrag(const juce::StringArray &files) {
+    for(auto& fileName: files){
+        juce::File eachFile{fileName};
+        std::unique_ptr<juce::AudioFormatReader> reader{formatManager.createReaderFor(eachFile)};
+        if(reader == nullptr){
+            return false;
+        }else{
+            juce::URL fileRead{eachFile};
+            std::cout<<"file name "<< eachFile.getFileName()<<std::endl;
+            std::cout<<"file type "<< eachFile.getFileExtension()<<std::endl;
+            return true;
+        }
+    }
+}
+void PlaylistComponent::filesDropped (const juce::StringArray &files, int x, int y){
+    for(auto& fileName: files){
+            juce::File eachFile{fileName};
+            if(allTracks.count(eachFile) == 0){
+                trackTitles.push_back(eachFile.getFileName().toStdString());
+                allTracks.insert(eachFile);
+                fileStatus.insert({eachFile.getFileName().toStdString(), eachFile});
+            }
+    }
+    tableComponent.updateContent();
+    tableComponent.repaint();
+}
 
