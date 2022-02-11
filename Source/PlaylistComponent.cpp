@@ -12,8 +12,9 @@
 #include "PlaylistComponent.h"
 
 //==============================================================================
-PlaylistComponent::PlaylistComponent(juce::AudioFormatManager& _formatManager):
-formatManager(_formatManager)
+PlaylistComponent::PlaylistComponent(juce::AudioFormatManager& _formatManager, DeckGUI& _deckGUI):
+formatManager(_formatManager),
+deckGui(_deckGUI)
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
@@ -142,7 +143,7 @@ juce::Component *PlaylistComponent::refreshComponentForCell(
 void PlaylistComponent::buttonClicked(juce::Button* button) {
     int id = std::stoi(button->getComponentID().toStdString());
     std::cout<<"button clicked "<< trackTitles[id] <<std::endl;
-
+    deckGui.loadURl(fileStatus.at(trackTitles[id]));
 }
 
 bool PlaylistComponent::isInterestedInFileDrag(const juce::StringArray &files) {

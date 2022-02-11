@@ -45,7 +45,7 @@ private:
 
     juce::MixerAudioSource mixerSource;
 
-    PlaylistComponent playlistComponent{formatManager};
+    PlaylistComponent playlistComponent{formatManager, deckGUI1};
 
     double gain;
     bool isPlaying;
