@@ -82,7 +82,6 @@ void DeckGUI::resized()
     speedSlider.setBounds(0, rowHeight*7, getWidth(), rowHeight);
     positionSlider.setBounds(0, rowHeight*8, getWidth(), rowHeight);
 
-
 }
 
 void DeckGUI::buttonClicked(juce::Button * button) {
@@ -129,4 +128,9 @@ void DeckGUI::filesDropped(const juce::StringArray &files, int x, int y){
 
 void DeckGUI::timerCallback() {
     waveformDisplay.setPositionRelative(player->getPositionRelative());
+}
+
+void DeckGUI::loadURl(juce::File &file) {
+    juce::URL fileURL{juce::File{file}};
+    player->loadURL(fileURL);
 }

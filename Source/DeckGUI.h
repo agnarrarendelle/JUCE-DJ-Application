@@ -43,6 +43,8 @@ public:
 
     void timerCallback() override;
 
+    void loadURl(juce::File &);
+
 private:
     juce::TextButton playButton{"Play"};
     juce::TextButton stopButton{"Stop"};
