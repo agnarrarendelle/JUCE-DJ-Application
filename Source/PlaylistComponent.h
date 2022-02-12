@@ -9,13 +9,15 @@
 */
 
 #pragma once
-
 #include <JuceHeader.h>
 #include <vector>
 #include <string>
 #include <set>
 #include <map>
 #include "DeckGUI.h"
+#include "DeckGUIGroup.h"
+
+
 //==============================================================================
 /*
 */
@@ -25,7 +27,7 @@ class PlaylistComponent : public juce::Component,
                           public juce::FileDragAndDropTarget
 {
 public:
-    PlaylistComponent(juce::AudioFormatManager&, DeckGUI&);
+    PlaylistComponent(juce::AudioFormatManager&, DeckGUIGroup&);
     ~PlaylistComponent() override;
 
     void paint (juce::Graphics&) override;
@@ -69,7 +71,6 @@ private:
     std::vector<std::string> trackTitles;
     std::set<juce::File> allTracks;
     std::map<std::string, juce::File> fileStatus;
-
-    DeckGUI& deckGui;
+    DeckGUIGroup& deckGUIGroup;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PlaylistComponent)
 };

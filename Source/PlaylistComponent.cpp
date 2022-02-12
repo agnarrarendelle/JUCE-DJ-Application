@@ -7,19 +7,15 @@
 
   ==============================================================================
 */
-
 #include <JuceHeader.h>
 #include "PlaylistComponent.h"
 
 //==============================================================================
-PlaylistComponent::PlaylistComponent(juce::AudioFormatManager& _formatManager, DeckGUI& _deckGUI):
+PlaylistComponent::PlaylistComponent(juce::AudioFormatManager &_formatManager, DeckGUIGroup& _deckGUIGroup):
 formatManager(_formatManager),
-deckGui(_deckGUI)
+deckGUIGroup(_deckGUIGroup)
+
 {
-    // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.
-
-
     tableComponent.getHeader().addColumn("Track Name", 1, 400);
     tableComponent.getHeader().addColumn("Track Type", 2, 200);
     tableComponent.getHeader().addColumn("", 3, 200);
@@ -143,7 +139,7 @@ juce::Component *PlaylistComponent::refreshComponentForCell(
 void PlaylistComponent::buttonClicked(juce::Button* button) {
     int id = std::stoi(button->getComponentID().toStdString());
     std::cout<<"button clicked "<< trackTitles[id] <<std::endl;
-    deckGui.loadURl(fileStatus.at(trackTitles[id]));
+    deckGUIGroup.loadURLintoOnePlayer(fileStatus.at(trackTitles[id]));
 }
 
 bool PlaylistComponent::isInterestedInFileDrag(const juce::StringArray &files) {
