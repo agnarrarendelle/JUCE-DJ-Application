@@ -43,7 +43,10 @@ public:
 
     void timerCallback() override;
 
-    void loadURl(juce::File &);
+    void loadURL(juce::File &);
+
+    bool isTrackLoaded();
+
 
 private:
     juce::TextButton playButton{"Play"};
@@ -55,6 +58,6 @@ private:
 
     DJAudioPlayer* player;
     WaveformDisplay waveformDisplay;
-
+    bool isLoaded;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DeckGUI)
 };

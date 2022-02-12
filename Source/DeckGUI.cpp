@@ -42,6 +42,7 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player,
     speedSlider.setRange(0,10);
 
     startTimer(100);
+    isLoaded = false;
 }
 
 DeckGUI::~DeckGUI()
@@ -86,10 +87,10 @@ void DeckGUI::resized()
 
 void DeckGUI::buttonClicked(juce::Button * button) {
     if(button == &playButton){
-        //isPlaying = true;
+
         player->start();
     }else if(button == &stopButton){
-        //isPlaying = false;
+        isLoaded = false;
         player->stop();
     }else if(button == &loadButton){
         juce::FileChooser chooser{"Select a audio file to play..."};
@@ -130,7 +131,17 @@ void DeckGUI::timerCallback() {
     waveformDisplay.setPositionRelative(player->getPositionRelative());
 }
 
-void DeckGUI::loadURl(juce::File &file) {
+void DeckGUI::loadURL(juce::File &file) {
+    std::cout<<"loaded!"<<std::endl;
+
     juce::URL fileURL{juce::File{file}};
     player->loadURL(fileURL);
+    waveformDisplay.loadURL(fileURL);
+    isLoaded = true;
+}
+
+
+
+bool DeckGUI::isTrackLoaded() {
+    return isLoaded;
 }
