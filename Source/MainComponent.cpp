@@ -27,6 +27,9 @@ MainComponent::MainComponent()
 
     formatManager.registerBasicFormats();
 
+    deckGUIGroup.addDeckAndPlayer(&deckGUI1);
+    deckGUIGroup.addDeckAndPlayer(&deckGUI2);
+
 //
 //    playButton.addListener(this);
 //    stopButton.addListener(this);
@@ -173,5 +176,7 @@ void MainComponent::resized()
 ////        //transportSource.setPosition(positionSlider.getValue());
 ////    }
 //}
+
+
 
 

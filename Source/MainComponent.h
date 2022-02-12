@@ -4,6 +4,8 @@
 #include "DJAudioPlayer.h"
 #include "DeckGUI.h"
 #include "PlaylistComponent.h"
+#include <map>
+#include <vector>
 
 //==============================================================================
 /*
@@ -31,7 +33,6 @@ public:
 //    //implement Slider::Listener pure virtual function
 //    void sliderValueChanged(juce::Slider* slider) override;
 
-
 private:
     //==============================================================================
     // Your private member variables go here...
@@ -45,13 +46,12 @@ private:
 
     juce::MixerAudioSource mixerSource;
 
-    PlaylistComponent playlistComponent{formatManager, deckGUI1};
+
 
     double gain;
     bool isPlaying;
-
-
-
+    DeckGUIGroup deckGUIGroup;
+    PlaylistComponent playlistComponent{formatManager, deckGUIGroup};
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };
