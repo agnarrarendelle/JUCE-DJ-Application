@@ -12,10 +12,20 @@
 #include "DeckGUIGroup.h"
 
 //==============================================================================
-DeckGUIGroup::DeckGUIGroup()
+DeckGUIGroup::DeckGUIGroup(juce::AudioFormatManager& _formatManager,
+                           juce::AudioThumbnailCache& _cache,
+                           DJAudioPlayer& _player1,
+                           DJAudioPlayer& _player2)
+:formatManager(_formatManager),
+thumbnailCache(_cache),
+player1(_player1),
+player2(_player2)
+
 {
-
-
+    addAndMakeVisible(deckGUI1);
+    addAndMakeVisible(deckGUI2);
+    addDeckAndPlayer(&deckGUI1);
+    addDeckAndPlayer(&deckGUI2);
 }
 
 DeckGUIGroup::~DeckGUIGroup()
@@ -46,6 +56,8 @@ void DeckGUIGroup::resized()
 {
     // This method is where you should set the bounds of any child
     // components that your component contains..
+    deckGUI1.setBounds(0,0,getWidth()/2, getHeight());
+    deckGUI2.setBounds(getWidth()/2,0, getWidth()/2, getHeight());
 
 }
 

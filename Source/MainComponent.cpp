@@ -20,15 +20,14 @@ MainComponent::MainComponent()
         setAudioChannels (0, 2);
     }
 
-    addAndMakeVisible(deckGUI1);
-    addAndMakeVisible(deckGUI2);
 
+    addAndMakeVisible(deckGUIGroup);
     addAndMakeVisible(playlistComponent);
 
     formatManager.registerBasicFormats();
 
-    deckGUIGroup.addDeckAndPlayer(&deckGUI1);
-    deckGUIGroup.addDeckAndPlayer(&deckGUI2);
+    allPlayers.push_back(&player1);
+    allPlayers.push_back(&player2);
 
 //
 //    playButton.addListener(this);
@@ -62,11 +61,13 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     isPlaying = true;
 
     gain = 0.5;
-
-    player1.prepareToPlay(samplesPerBlockExpected, sampleRate);
-    player2.prepareToPlay(samplesPerBlockExpected, sampleRate);
-
     mixerSource.prepareToPlay(samplesPerBlockExpected,sampleRate);
+    for( auto& player:allPlayers){
+        player->prepareToPlay(samplesPerBlockExpected,sampleRate);
+    }
+//    player1.prepareToPlay(samplesPerBlockExpected, sampleRate);
+//    player2.prepareToPlay(samplesPerBlockExpected, sampleRate);
+
 
     mixerSource.addInputSource(&player1, false);
     mixerSource.addInputSource(&player2, false);
@@ -114,8 +115,11 @@ void MainComponent::releaseResources()
     // For more details, see the help for AudioProcessor::releaseResources()
     mixerSource.removeAllInputs();
     mixerSource.releaseResources();
-    player1.releaseResources();
-    player2.releaseResources();
+    for(DJAudioPlayer* player:allPlayers){
+        player->releaseResources();
+    }
+//    player1.releaseResources();
+//    player2.releaseResources();
 }
 
 //==============================================================================
@@ -129,53 +133,11 @@ void MainComponent::paint (juce::Graphics& g)
 
 void MainComponent::resized()
 {
-//
-//    double rowHeight = getHeight()/10;
-//    playButton.setBounds(0,0,getWidth(), rowHeight);
-//    stopButton.setBounds(0, rowHeight, getWidth(), rowHeight);
-//    loadButton.setBounds(0, rowHeight*2, getWidth(), rowHeight);
-//    volumeSlider.setBounds(0, rowHeight*4, getWidth(), rowHeight);
-//    gainSlider.setBounds(0, rowHeight*5, getWidth(), rowHeight);
-//    speedSlider.setBounds(0, rowHeight*6, getWidth(), rowHeight);
-//    positionSlider.setBounds(0, rowHeight*7, getWidth(), rowHeight);
-
-    deckGUI1.setBounds(0,0,getWidth()/2, getHeight()/2);
-    deckGUI2.setBounds(getWidth()/2,0, getWidth()/2, getHeight()/2);
-
+    deckGUIGroup.setBounds(0,0,getWidth(), getHeight()/2);
     playlistComponent.setBounds(0, getHeight()/2, getWidth(), getHeight()/2);
 }
 
-//void MainComponent::buttonClicked(juce::Button * button) {
-////    if(button == &playButton){
-////        isPlaying = true;
-////        player1.start();
-////    }else if(button == &stopButton){
-////        isPlaying = false;
-////        player1.stop();
-////    }else if(button == &loadButton){
-////        juce::FileChooser chooser{"Select a audio file to play..."};
-////        if(chooser.browseForFileToOpen()){
-////
-////            player1.loadURL(juce::URL{chooser.getResult()});
-////        }
-////    }
-//}
-//
-//void MainComponent::sliderValueChanged(juce::Slider *slider) {
-////    double value = slider->getValue();
-////    if(slider == &volumeSlider){
-////
-////    }else if(slider == &gainSlider){
-////        gain = value;
-////        player1.setGain(value);
-////    }else if(slider == &speedSlider){
-////        player1.setSpeed(value);
-////        //resampleSource.setResamplingRatio(slider->getValue());
-////    }else if(slider == &positionSlider){
-////        player1.setRelativePosition(value);
-////        //transportSource.setPosition(positionSlider.getValue());
-////    }
-//}
+
 
 
 
