@@ -23,10 +23,12 @@ deckGUIGroup(_deckGUIGroup)
     tableComponent.setModel(this);
 
     addAndMakeVisible(tableComponent);
+    loadPlaylist();
 }
 
 PlaylistComponent::~PlaylistComponent()
 {
+    savePlaylist();
 }
 
 void PlaylistComponent::paint (juce::Graphics& g)
@@ -158,14 +160,40 @@ bool PlaylistComponent::isInterestedInFileDrag(const juce::StringArray &files) {
 }
 void PlaylistComponent::filesDropped (const juce::StringArray &files, int x, int y){
     for(auto& fileName: files){
-            juce::File eachFile{fileName};
-            if(allTracks.count(eachFile) == 0){
-                trackTitles.push_back(eachFile.getFileName().toStdString());
-                allTracks.insert(eachFile);
-                fileStatus.insert({eachFile.getFileName().toStdString(), eachFile});
-            }
+            //juce::File eachFile{fileName};
+            //std::cout<<"file is "<< eachFile.getFullPathName()<<std::endl;
+            convertLineToFileEntry(fileName.toStdString());
     }
     tableComponent.updateContent();
     tableComponent.repaint();
+}
+
+void PlaylistComponent::savePlaylist()
+{
+    std::ofstream outFile("./play_list_file.txt");
+    for (const auto &eachFile : allTracks){
+        outFile << eachFile.getFullPathName() << "\n";
+    }
+    // the important part
+}
+
+void PlaylistComponent::loadPlaylist() {
+    std::ifstream file{"./play_list_file.txt"};
+    std::string line;
+    while(std::getline(file, line)){
+        convertLineToFileEntry(line);
+    }
+    tableComponent.updateContent();
+    tableComponent.repaint();
+}
+
+void PlaylistComponent::convertLineToFileEntry(std::string line) {
+    juce::File eachFile{line};
+    //std::cout<<"file is "<< eachFile.getFullPathName()<<std::endl;
+    if(allTracks.count(eachFile) == 0){
+        trackTitles.push_back(eachFile.getFileName().toStdString());
+        allTracks.insert(eachFile);
+        fileStatus.insert({eachFile.getFileName().toStdString(), eachFile});
+    }
 }
 

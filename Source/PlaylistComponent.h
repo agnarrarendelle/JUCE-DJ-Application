@@ -14,6 +14,7 @@
 #include <string>
 #include <set>
 #include <map>
+#include <fstream>
 #include "DeckGUI.h"
 #include "DeckGUIGroup.h"
 
@@ -72,5 +73,9 @@ private:
     std::set<juce::File> allTracks;
     std::map<std::string, juce::File> fileStatus;
     DeckGUIGroup& deckGUIGroup;
+
+    void savePlaylist();
+    void loadPlaylist();
+    void convertLineToFileEntry(std::string);
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PlaylistComponent)
 };
