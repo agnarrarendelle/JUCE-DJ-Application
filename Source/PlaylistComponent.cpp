@@ -13,7 +13,8 @@
 //==============================================================================
 PlaylistComponent::PlaylistComponent(juce::AudioFormatManager &_formatManager, DeckGUIGroup& _deckGUIGroup):
 formatManager(_formatManager),
-deckGUIGroup(_deckGUIGroup)
+deckGUIGroup(_deckGUIGroup),
+playlistFilePath("./play_list_file.txt")
 
 {
     tableComponent.getHeader().addColumn("Track Name", 1, 400);
@@ -157,11 +158,11 @@ void PlaylistComponent::buttonClicked(juce::Button* button) {
         deckGUIGroup.loadURLintoOnePlayer(fileStatus.at(trackTitles[id]));
     }
     else if(buttonText == "remove"){
-        allTracks.erase(juce::File{trackTitles[id]});
+        std::cout<<"track path: "<<trackTitles[id]<<std::endl;
+        allTracks.erase(fileStatus[trackTitles[id]].getFullPathName());
         fileStatus.erase(trackTitles[id]);
         trackTitles.erase(trackTitles.begin()+id);
         updatePlayList();
-
     }
 }
 
@@ -192,7 +193,7 @@ void PlaylistComponent::filesDropped (const juce::StringArray &files, int x, int
 
 void PlaylistComponent::savePlaylist()
 {
-    std::ofstream outFile("./play_list_file.txt");
+    std::ofstream outFile(playlistFilePath);
     for (const auto &eachFile : allTracks){
         outFile << eachFile.getFullPathName() << "\n";
     }
@@ -200,7 +201,7 @@ void PlaylistComponent::savePlaylist()
 }
 
 void PlaylistComponent::loadPlaylist() {
-    std::ifstream file{"./play_list_file.txt"};
+    std::ifstream file{playlistFilePath};
     std::string line;
     while(std::getline(file, line)){
         convertLineToFileEntry(line);

@@ -73,6 +73,7 @@ private:
     std::set<juce::File> allTracks;
     std::map<std::string, juce::File> fileStatus;
     DeckGUIGroup& deckGUIGroup;
+    std::string playlistFilePath;
 
     void savePlaylist();
     void loadPlaylist();
