@@ -31,6 +31,8 @@ class DJAudioPlayer: public juce::AudioSource{
 
     //get relative position of playhead
     double getPositionRelative();
+    double getPosition();
+    bool isTrackFinished();
 
     private:
         juce::AudioFormatManager& formatManager;

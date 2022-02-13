@@ -92,3 +92,11 @@ void DJAudioPlayer::stop(){
 double DJAudioPlayer::getPositionRelative(){
     return transportSource.getCurrentPosition() / transportSource.getLengthInSeconds();
 }
+
+double DJAudioPlayer::getPosition() {
+    return transportSource.getCurrentPosition();
+}
+
+bool DJAudioPlayer::isTrackFinished(){
+    return ((int)getPositionRelative()) == 1;
+}
