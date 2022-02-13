@@ -12,7 +12,7 @@
     This component lives inside our window, and this is where you should put all
     your controls and content.
 */
-class MainComponent  : public juce::AudioAppComponent
+class MainComponent : public juce::AudioAppComponent
 {
 public:
     //==============================================================================
@@ -32,7 +32,6 @@ public:
 //    void buttonClicked(juce::Button*) override;
 //    //implement Slider::Listener pure virtual function
 //    void sliderValueChanged(juce::Slider* slider) override;
-
 private:
     //==============================================================================
     // Your private member variables go here...
@@ -45,7 +44,6 @@ private:
     DeckGUI deckGUI2{&player2, formatManager, thumbnailCache};
 
     juce::MixerAudioSource mixerSource;
-
 
 
     double gain;
