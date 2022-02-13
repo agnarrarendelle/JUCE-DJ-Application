@@ -95,6 +95,7 @@ void PlaylistComponent::paintCell(
 
     switch (columnId) {
         case 1:{
+
             g.drawText(trackTitles[rowNumber],
                        2,
                        0,
@@ -102,6 +103,7 @@ void PlaylistComponent::paintCell(
                        height,
                        juce::Justification::centredLeft, true
             );
+
             break;
         }
         case 2:{
@@ -164,7 +166,8 @@ void PlaylistComponent::buttonClicked(juce::Button* button) {
     else if(buttonText == "remove"){
         std::cout<<"track path: "<<trackTitles[id]<<std::endl;
         allTracks.erase(fileStatus[trackTitles[id]].getFullPathName());
-        fileStatus.erase(trackTitles[id]);
+        //fileStatus.erase(trackTitles[id]);
+        allTrackTitles[trackTitles[id]] = false;
         trackTitles.erase(trackTitles.begin()+id);
         updatePlayList();
     }
@@ -218,6 +221,7 @@ void PlaylistComponent::convertLineToFileEntry(std::string line) {
     //std::cout<<"file is "<< eachFile.getFullPathName()<<std::endl;
     if(allTracks.count(eachFile) == 0){
         trackTitles.push_back(eachFile.getFileName().toStdString());
+        allTrackTitles.insert({eachFile.getFileName().toStdString(), true});
         allTracks.insert(eachFile);
         fileStatus.insert({eachFile.getFileName().toStdString(), eachFile});
     }
@@ -234,7 +238,20 @@ void PlaylistComponent::textEditorTextChanged(juce::TextEditor & textEditor) {
     if(isSearchFieldEmpty()){
         std::cout<<"empty"<<std::endl;
     }
-    putSearchResultIntoPlaylist(searchResult);
+    if(!isSearchFieldEmpty()){
+        putSearchResultIntoPlaylist(searchResult);
+    }else{
+        for(auto& eachTrackTitle: allTrackTitles){
+
+            for(int i = 0; i < trackTitles.size(); i++){
+                if(std::find(trackTitles.begin(), trackTitles.end(), eachTrackTitle.first)==trackTitles.end() && eachTrackTitle.second == true){
+                    trackTitles.push_back(eachTrackTitle.first);
+                    allTracks.insert(fileStatus[eachTrackTitle.first]);
+                }
+            }
+        }
+        updatePlayList();
+    }
 }
 
 bool PlaylistComponent::isSearchFieldEmpty() {
@@ -242,11 +259,16 @@ bool PlaylistComponent::isSearchFieldEmpty() {
 }
 
 void PlaylistComponent::putSearchResultIntoPlaylist(std::string &result) {
-    std::vector<std::string> searchResult;
-    for(std::string& trackName:trackTitles){
-        if(trackName.find(result) != std::string::npos){
-            searchResult.push_back(trackName);
+    for(int i = 0; i < trackTitles.size(); i++){
+        if(trackTitles[i].find(result) == std::string::npos){
+            juce::File& file = fileStatus[trackTitles[i]];
+            allTracks.erase(fileStatus[trackTitles[i]]);
+            //fileStatus.erase(trackTitles[i]);
+            trackTitles.erase(trackTitles.begin() + i);
         }
     }
+    updatePlayList();
+
 }
+
 

@@ -71,6 +71,7 @@ private:
     juce::AudioFormatManager& formatManager;
     juce::TableListBox tableComponent;
     std::vector<std::string> trackTitles;
+    std::map<std::string, bool> allTrackTitles;
     std::set<juce::File> allTracks;
     std::map<std::string, juce::File> fileStatus;
     DeckGUIGroup& deckGUIGroup;
