@@ -111,6 +111,9 @@ void DeckGUI::sliderValueChanged(juce::Slider *slider) {
         //resampleSource.setResamplingRatio(slider->getValue());
     }else if(slider == &positionSlider){
         player->setRelativePosition(value);
+        std::cout<<"Position: "<<player->getPosition()<<std::endl;
+        std::cout<<"Relative Position: "<<player->getPositionRelative()<<std::endl;
+
         //transportSource.setPosition(positionSlider.getValue());
     }
 }
@@ -135,6 +138,7 @@ void DeckGUI::loadURL(juce::File &file) {
     std::cout<<"loaded!"<<std::endl;
 
     juce::URL fileURL{juce::File{file}};
+    trackStatesInitialized();
     player->loadURL(fileURL);
     waveformDisplay.loadURL(fileURL);
     isLoaded = true;
@@ -144,4 +148,15 @@ void DeckGUI::loadURL(juce::File &file) {
 
 bool DeckGUI::isTrackLoaded() {
     return isLoaded;
+}
+
+bool DeckGUI::isTrackEnded() {
+    return player->isTrackFinished();
+}
+
+void DeckGUI::trackStatesInitialized(){
+    player->setRelativePosition(0);
+    player->setGain(0.5);
+    positionSlider.setValue(0);
+    volumeSlider.setValue(0.5);
 }

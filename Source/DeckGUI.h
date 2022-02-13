@@ -47,7 +47,9 @@ public:
 
     bool isTrackLoaded();
 
+    bool isTrackEnded();
 
+    void trackStatesInitialized();
 private:
     juce::TextButton playButton{"Play"};
     juce::TextButton stopButton{"Stop"};
