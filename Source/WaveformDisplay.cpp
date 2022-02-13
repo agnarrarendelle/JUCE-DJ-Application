@@ -52,7 +52,7 @@ void WaveformDisplay::paint (juce::Graphics& g)
                 1.0f
         );
         g.setColour(juce::Colours::lightgreen);
-        g.drawRect(localPosition * getWidth(), 0, getWidth()/20, getHeight());
+        g.drawRect(localPosition * getWidth(), 0, 1, getHeight());
     }else{
         g.setFont (20.0f);
         g.drawText ("File not loaded...", getLocalBounds(),
@@ -78,7 +78,6 @@ void WaveformDisplay::loadURL(juce::URL audioURL) {
 }
 
 void WaveformDisplay::changeListenerCallback(juce::ChangeBroadcaster *source) {
-    std::cout<<"Waveform Listener Changed"<<std::endl;
     repaint();
 }
 
