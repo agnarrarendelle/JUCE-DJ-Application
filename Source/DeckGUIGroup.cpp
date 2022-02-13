@@ -55,7 +55,7 @@ void DeckGUIGroup::addDeckAndPlayer(DeckGUI *deckGUI) {
 
 void DeckGUIGroup::loadURLintoOnePlayer(juce::File & file) {
     for(auto const& eachDeck: allDeckStatus){
-        if( eachDeck->isTrackLoaded() == false){
+        if( eachDeck->isTrackLoaded() == false || eachDeck->isTrackEnded()){
             //eachDeck->isPlaying = true;
             eachDeck->loadURL(file);
             break;
