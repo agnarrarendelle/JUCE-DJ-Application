@@ -45,7 +45,7 @@ private:
 
     juce::MixerAudioSource mixerSource;
 
-
+    double ff;
     double gain;
     bool isPlaying;
     DeckGUIGroup deckGUIGroup;
