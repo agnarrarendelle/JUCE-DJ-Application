@@ -25,6 +25,9 @@ playlistFilePath("./play_list_file.txt")
     tableComponent.setModel(this);
 
     addAndMakeVisible(tableComponent);
+    addAndMakeVisible(playlistSearchField);
+    playlistSearchField.setTextToShowWhenEmpty("Search for a song...", juce::Colours::white);
+    playlistSearchField.addListener(this);
     loadPlaylist();
 }
 
@@ -57,7 +60,8 @@ void PlaylistComponent::resized()
 {
     // This method is where you should set the bounds of any child
     // components that your component contains..
-    tableComponent.setBounds(0,0,getWidth(), getHeight());
+    tableComponent.setBounds(0,0,getWidth(), getHeight()*0.9);
+    playlistSearchField.setBounds(0,getHeight()*0.9,getWidth()/6,getHeight()*0.1 );
 }
 
 int PlaylistComponent::getNumRows() {
@@ -222,5 +226,27 @@ void PlaylistComponent::convertLineToFileEntry(std::string line) {
 void PlaylistComponent::updatePlayList() {
     tableComponent.updateContent();
     tableComponent.repaint();
+}
+
+void PlaylistComponent::textEditorTextChanged(juce::TextEditor & textEditor) {
+    std::string searchResult = textEditor.getText().toStdString();
+    std::cout<<searchResult<<std::endl;
+    if(isSearchFieldEmpty()){
+        std::cout<<"empty"<<std::endl;
+    }
+    putSearchResultIntoPlaylist(searchResult);
+}
+
+bool PlaylistComponent::isSearchFieldEmpty() {
+    return playlistSearchField.isEmpty();
+}
+
+void PlaylistComponent::putSearchResultIntoPlaylist(std::string &result) {
+    std::vector<std::string> searchResult;
+    for(std::string& trackName:trackTitles){
+        if(trackName.find(result) != std::string::npos){
+            searchResult.push_back(trackName);
+        }
+    }
 }
 

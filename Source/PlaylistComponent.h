@@ -25,7 +25,8 @@
 class PlaylistComponent : public juce::Component,
                           public juce::TableListBoxModel,
                           public juce::Button::Listener,
-                          public juce::FileDragAndDropTarget
+                          public juce::FileDragAndDropTarget,
+                          public juce::TextEditor::Listener
 {
 public:
     PlaylistComponent(juce::AudioFormatManager&, DeckGUIGroup&);
@@ -74,10 +75,13 @@ private:
     std::map<std::string, juce::File> fileStatus;
     DeckGUIGroup& deckGUIGroup;
     std::string playlistFilePath;
-
+    juce::TextEditor playlistSearchField{"search field"};
+    void putSearchResultIntoPlaylist(std::string&);
+    void textEditorTextChanged (juce::TextEditor& ) override;
     void savePlaylist();
     void loadPlaylist();
     void convertLineToFileEntry(std::string);
     void updatePlayList();
+    bool isSearchFieldEmpty();
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PlaylistComponent)
 };
