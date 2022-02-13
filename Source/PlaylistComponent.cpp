@@ -17,8 +17,9 @@ deckGUIGroup(_deckGUIGroup)
 
 {
     tableComponent.getHeader().addColumn("Track Name", 1, 400);
-    tableComponent.getHeader().addColumn("Track Type", 2, 200);
-    tableComponent.getHeader().addColumn("", 3, 200);
+    tableComponent.getHeader().addColumn("Track Type", 2, 100);
+    tableComponent.getHeader().addColumn("", 3, 100);
+    tableComponent.getHeader().addColumn("", 4, 100);
 
     tableComponent.setModel(this);
 
@@ -123,9 +124,18 @@ juce::Component *PlaylistComponent::refreshComponentForCell(
         juce::Component *existingComponentToUpdate
 )
 {
+    juce::TextButton* btn;
     if(columnId == 3){
         if(existingComponentToUpdate == nullptr){
-            juce::TextButton* btn = new juce::TextButton{"play"};
+            btn = new juce::TextButton{"play"};
+            juce::String id{std::to_string(rowNumber)};
+            btn->setComponentID(id);
+            btn->addListener(this);
+            existingComponentToUpdate = btn;
+        }
+    }else if(columnId == 4){
+        if(existingComponentToUpdate == nullptr){
+            btn = new juce::TextButton{"remove"};
             juce::String id{std::to_string(rowNumber)};
             btn->setComponentID(id);
             btn->addListener(this);
@@ -133,16 +143,29 @@ juce::Component *PlaylistComponent::refreshComponentForCell(
         }
     }
 
+
     return existingComponentToUpdate;
 }
 
 
 
 void PlaylistComponent::buttonClicked(juce::Button* button) {
+    std::string buttonText = button->getButtonText().toStdString();
     int id = std::stoi(button->getComponentID().toStdString());
-    std::cout<<"button clicked "<< trackTitles[id] <<std::endl;
-    deckGUIGroup.loadURLintoOnePlayer(fileStatus.at(trackTitles[id]));
+    if(buttonText == "play"){
+        std::cout<<"button clicked "<< trackTitles[id] <<std::endl;
+        deckGUIGroup.loadURLintoOnePlayer(fileStatus.at(trackTitles[id]));
+    }
+    else if(buttonText == "remove"){
+        allTracks.erase(juce::File{trackTitles[id]});
+        fileStatus.erase(trackTitles[id]);
+        trackTitles.erase(trackTitles.begin()+id);
+        updatePlayList();
+
+    }
 }
+
+
 
 bool PlaylistComponent::isInterestedInFileDrag(const juce::StringArray &files) {
     for(auto& fileName: files){
@@ -164,8 +187,7 @@ void PlaylistComponent::filesDropped (const juce::StringArray &files, int x, int
             //std::cout<<"file is "<< eachFile.getFullPathName()<<std::endl;
             convertLineToFileEntry(fileName.toStdString());
     }
-    tableComponent.updateContent();
-    tableComponent.repaint();
+    updatePlayList();
 }
 
 void PlaylistComponent::savePlaylist()
@@ -183,8 +205,7 @@ void PlaylistComponent::loadPlaylist() {
     while(std::getline(file, line)){
         convertLineToFileEntry(line);
     }
-    tableComponent.updateContent();
-    tableComponent.repaint();
+    updatePlayList();
 }
 
 void PlaylistComponent::convertLineToFileEntry(std::string line) {
@@ -195,5 +216,10 @@ void PlaylistComponent::convertLineToFileEntry(std::string line) {
         allTracks.insert(eachFile);
         fileStatus.insert({eachFile.getFileName().toStdString(), eachFile});
     }
+}
+
+void PlaylistComponent::updatePlayList() {
+    tableComponent.updateContent();
+    tableComponent.repaint();
 }
 

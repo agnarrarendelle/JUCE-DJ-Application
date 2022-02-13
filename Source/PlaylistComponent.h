@@ -77,5 +77,6 @@ private:
     void savePlaylist();
     void loadPlaylist();
     void convertLineToFileEntry(std::string);
+    void updatePlayList();
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PlaylistComponent)
 };
