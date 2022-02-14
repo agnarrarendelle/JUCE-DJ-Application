@@ -40,6 +40,7 @@ private:
 
     DJAudioPlayer player1{formatManager};
     DJAudioPlayer player2{formatManager};
+    DJAudioPlayer player3{formatManager};
 
 
     juce::MixerAudioSource mixerSource;
@@ -47,7 +48,7 @@ private:
     double ff;
     double gain;
     bool isPlaying;
-    DeckGUIGroup deckGUIGroup{formatManager, thumbnailCache, player1, player2};
+    DeckGUIGroup deckGUIGroup{formatManager, thumbnailCache, player1, player2, player3};
     PlaylistComponent playlistComponent{formatManager, deckGUIGroup};
     std::vector<DJAudioPlayer*> allPlayers;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)

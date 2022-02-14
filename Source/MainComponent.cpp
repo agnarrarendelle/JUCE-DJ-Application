@@ -5,7 +5,7 @@ MainComponent::MainComponent()
 {
     // Make sure you set the size of the component after
     // you add any child components.
-    setSize (700, 900);
+    setSize (900, 900);
 
     // Some platforms require permissions to open input channels so request that here
     if (juce::RuntimePermissions::isRequired (juce::RuntimePermissions::recordAudio)
@@ -28,6 +28,7 @@ MainComponent::MainComponent()
 
     allPlayers.push_back(&player1);
     allPlayers.push_back(&player2);
+    allPlayers.push_back(&player3);
 
 //
 //    playButton.addListener(this);
@@ -71,6 +72,7 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
 
     mixerSource.addInputSource(&player1, false);
     mixerSource.addInputSource(&player2, false);
+    mixerSource.addInputSource(&player3, false);
 
 }
 
@@ -133,8 +135,8 @@ void MainComponent::paint (juce::Graphics& g)
 
 void MainComponent::resized()
 {
-    deckGUIGroup.setBounds(0,0,getWidth(), getHeight()/2);
-    playlistComponent.setBounds(0, getHeight()/2, getWidth(), getHeight()/2);
+    deckGUIGroup.setBounds(0,0,getWidth(), getHeight()*0.8);
+    playlistComponent.setBounds(0, getHeight()*0.8, getWidth(), getHeight()*0.2);
 }
 
 
