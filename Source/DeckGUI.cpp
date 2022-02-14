@@ -107,14 +107,22 @@ void DeckGUI::buttonClicked(juce::Button * button) {
     }else if(button == &fastForwardButton){
         std::cout<<"old position: "<<player->getPosition()<<std::endl;
         double newPosition = player->getPosition() + 3.0f;
-        player->setPosition(newPosition);
+        if(newPosition > player->getTrackLength()){
+            player->setRelativePosition(1.0f);
+        }else{
+            player->setPosition(newPosition);
+        }
         std::cout<<"new position: "<<player->getPosition()<<std::endl;
     }else if(button == &rewindButton){
         std::cout<<"rewind"<<std::endl;
         std::cout<<"old position: "<<player->getPosition()<<std::endl;
         double newPosition = player->getPosition() - 3.0f;
-        player->setPosition(newPosition);
-        player->start();
+        if(newPosition < 0){
+            player->setPosition(0);
+            player->start();
+        }else{
+            player->setPosition(newPosition);
+        }
     }
 }
 
