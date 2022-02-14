@@ -33,6 +33,7 @@ class DJAudioPlayer: public juce::AudioSource{
     double getPositionRelative();
     double getPosition();
     bool isTrackFinished();
+    double getTrackLength();
 
     private:
         juce::AudioFormatManager& formatManager;
