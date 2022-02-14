@@ -15,17 +15,21 @@
 DeckGUIGroup::DeckGUIGroup(juce::AudioFormatManager& _formatManager,
                            juce::AudioThumbnailCache& _cache,
                            DJAudioPlayer& _player1,
-                           DJAudioPlayer& _player2)
+                           DJAudioPlayer& _player2,
+                           DJAudioPlayer& _player3)
 :formatManager(_formatManager),
 thumbnailCache(_cache),
 player1(_player1),
-player2(_player2)
+player2(_player2),
+player3(_player3)
 
 {
     addAndMakeVisible(deckGUI1);
     addAndMakeVisible(deckGUI2);
+    addAndMakeVisible(deckGUI3);
     addDeckAndPlayer(&deckGUI1);
     addDeckAndPlayer(&deckGUI2);
+    addDeckAndPlayer(&deckGUI3);
 }
 
 DeckGUIGroup::~DeckGUIGroup()
@@ -56,8 +60,9 @@ void DeckGUIGroup::resized()
 {
     // This method is where you should set the bounds of any child
     // components that your component contains..
-    deckGUI1.setBounds(0,0,getWidth()/2, getHeight());
-    deckGUI2.setBounds(getWidth()/2,0, getWidth()/2, getHeight());
+    deckGUI1.setBounds(0,0,getWidth(), getHeight()/3);
+    deckGUI2.setBounds(0,getHeight()/3, getWidth(), getHeight()/3);
+    deckGUI3.setBounds(0, (getHeight()/3)*2, getWidth(), getHeight()/3);
 
 }
 

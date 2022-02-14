@@ -24,7 +24,8 @@ public:
     DeckGUIGroup(juce::AudioFormatManager& _formatManager,
                  juce::AudioThumbnailCache& _cache,
                  DJAudioPlayer& _player1,
-                 DJAudioPlayer& _player2);
+                 DJAudioPlayer& _player2,
+                 DJAudioPlayer& _player3);
     ~DeckGUIGroup() override;
 
     void paint (juce::Graphics&) override;
@@ -36,9 +37,12 @@ private:
     juce::AudioThumbnailCache& thumbnailCache;
     DJAudioPlayer& player1;
     DJAudioPlayer& player2;
+    DJAudioPlayer& player3;
 
     DeckGUI deckGUI1{&player1, formatManager, thumbnailCache};
     DeckGUI deckGUI2{&player2, formatManager, thumbnailCache};
+    DeckGUI deckGUI3{&player3, formatManager, thumbnailCache};
+
     std::set<DeckGUI*> allDeckStatus;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DeckGUIGroup)
 };
