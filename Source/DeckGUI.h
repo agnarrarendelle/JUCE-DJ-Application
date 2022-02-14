@@ -54,6 +54,8 @@ private:
     juce::TextButton playButton{"Play"};
     juce::TextButton stopButton{"Stop"};
     juce::TextButton loadButton{"Load"};
+    juce::TextButton fastForwardButton{">> 3 seconds"};
+    juce::TextButton rewindButton{"3 seconds <<"};
     juce::Slider volumeSlider{"gain"};
     juce::Slider speedSlider{"speed"};
     juce::Slider positionSlider{"position"};

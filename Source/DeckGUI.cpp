@@ -28,6 +28,8 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player,
     addAndMakeVisible(speedSlider);
     addAndMakeVisible(positionSlider);
     addAndMakeVisible(waveformDisplay);
+    addAndMakeVisible(fastForwardButton);
+    addAndMakeVisible(rewindButton);
 
 
     playButton.addListener(this);
@@ -36,6 +38,8 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player,
     volumeSlider.addListener(this);
     speedSlider.addListener(this);
     positionSlider.addListener(this);
+    fastForwardButton.addListener(this);
+    rewindButton.addListener(this);
 
     volumeSlider.setRange(0,1);
     positionSlider.setRange(0,1);
@@ -82,6 +86,8 @@ void DeckGUI::resized()
     volumeSlider.setBounds(0, rowHeight*6, getWidth(), rowHeight);
     speedSlider.setBounds(0, rowHeight*7, getWidth(), rowHeight);
     positionSlider.setBounds(0, rowHeight*8, getWidth(), rowHeight);
+    rewindButton.setBounds(0, rowHeight*9, getWidth()/3, rowHeight);
+    fastForwardButton.setBounds(getWidth()/2, rowHeight*9, getWidth()/3, rowHeight);
 
 }
 
@@ -98,6 +104,17 @@ void DeckGUI::buttonClicked(juce::Button * button) {
             player->loadURL(juce::URL{chooser.getResult()});
             waveformDisplay.loadURL(juce::URL{chooser.getResult()});
         }
+    }else if(button == &fastForwardButton){
+        std::cout<<"old position: "<<player->getPosition()<<std::endl;
+        double newPosition = player->getPosition() + 3.0f;
+        player->setPosition(newPosition);
+        std::cout<<"new position: "<<player->getPosition()<<std::endl;
+    }else if(button == &rewindButton){
+        std::cout<<"rewind"<<std::endl;
+        std::cout<<"old position: "<<player->getPosition()<<std::endl;
+        double newPosition = player->getPosition() - 3.0f;
+        player->setPosition(newPosition);
+        player->start();
     }
 }
 
@@ -110,6 +127,7 @@ void DeckGUI::sliderValueChanged(juce::Slider *slider) {
         player->setSpeed(value);
         //resampleSource.setResamplingRatio(slider->getValue());
     }else if(slider == &positionSlider){
+        std::cout<<"Slider value: "<<value<<std::endl;
         player->setRelativePosition(value);
         std::cout<<"Position: "<<player->getPosition()<<std::endl;
         std::cout<<"Relative Position: "<<player->getPositionRelative()<<std::endl;
