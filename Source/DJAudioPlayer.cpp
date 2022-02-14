@@ -98,5 +98,5 @@ double DJAudioPlayer::getPosition() {
 }
 
 bool DJAudioPlayer::isTrackFinished(){
-    return ((int)getPositionRelative()) == 1;
+    return ((int)getPositionRelative()) >= 1;
 }
