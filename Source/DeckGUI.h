@@ -13,6 +13,7 @@
 #include <JuceHeader.h>
 #include "DJAudioPlayer.h"
 #include "WaveformDisplay.h"
+#include "LookAndFeel.h"
 #include <vector>
 
 //==============================================================================
@@ -59,7 +60,7 @@ private:
     juce::Slider volumeSlider{"gain"};
     juce::Slider speedSlider{"speed"};
     juce::Slider positionSlider{"position"};
-    juce::LookAndFeel_V4 lookAndFeel;
+    LookAndFeel lookAndFeel;
     DJAudioPlayer* player;
     WaveformDisplay waveformDisplay;
     bool isLoaded;
