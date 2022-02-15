@@ -13,7 +13,7 @@
 #include <JuceHeader.h>
 #include "DJAudioPlayer.h"
 #include "WaveformDisplay.h"
-
+#include <vector>
 
 //==============================================================================
 /*
@@ -59,9 +59,12 @@ private:
     juce::Slider volumeSlider{"gain"};
     juce::Slider speedSlider{"speed"};
     juce::Slider positionSlider{"position"};
-
+    juce::LookAndFeel_V4 lookAndFeel;
     DJAudioPlayer* player;
     WaveformDisplay waveformDisplay;
     bool isLoaded;
+    std::vector<juce::Slider*> allSliders;
+    std::vector<juce::TextButton*> allButtons;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DeckGUI)
 };

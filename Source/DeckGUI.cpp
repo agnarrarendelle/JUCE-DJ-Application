@@ -20,26 +20,58 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player,
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
+    allSliders.push_back(&volumeSlider);
+    allSliders.push_back(&speedSlider);
+    allSliders.push_back(&positionSlider);
+    allButtons.push_back(&playButton);
+    allButtons.push_back(&stopButton);
+    allButtons.push_back(&fastForwardButton);
+    allButtons.push_back(&rewindButton);
 
-    addAndMakeVisible(playButton);
-    addAndMakeVisible(stopButton);
-    addAndMakeVisible(loadButton);
-    addAndMakeVisible(volumeSlider);
-    addAndMakeVisible(speedSlider);
-    addAndMakeVisible(positionSlider);
+    for(const auto& slider: allSliders){
+        slider->setSliderStyle(juce::Slider::SliderStyle::Rotary);
+        slider->setTextBoxStyle(juce::Slider::TextBoxBelow, false, 80, 40);
+        addAndMakeVisible(*slider);
+        slider->addListener(this);
+    }
+    for(const auto& button: allButtons){
+        addAndMakeVisible(*button);
+        button->addListener(this);
+    }
+
+    //volumeSlider.setSliderStyle(juce::Slider::SliderStyle::Rotary);
+    //volumeSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 80, 40);
+    volumeSlider.textFromValueFunction = [](double value)
+    {
+        return juce::String("volume");
+    };
+    speedSlider.textFromValueFunction = [](double value)
+    {
+        return juce::String("speed");
+    };
+    positionSlider.textFromValueFunction = [](double value)
+    {
+        return juce::String("position");
+    };
+    //addAndMakeVisible(playButton);
+    //addAndMakeVisible(stopButton);
+    //addAndMakeVisible(loadButton);
+    //addAndMakeVisible(volumeSlider);
+    //addAndMakeVisible(speedSlider);
+    //addAndMakeVisible(positionSlider);
+    //addAndMakeVisible(fastForwardButton);
+    //addAndMakeVisible(rewindButton);
     addAndMakeVisible(waveformDisplay);
-    addAndMakeVisible(fastForwardButton);
-    addAndMakeVisible(rewindButton);
 
 
-    playButton.addListener(this);
-    stopButton.addListener(this);
-    loadButton.addListener(this);
-    volumeSlider.addListener(this);
-    speedSlider.addListener(this);
-    positionSlider.addListener(this);
-    fastForwardButton.addListener(this);
-    rewindButton.addListener(this);
+    //playButton.addListener(this);
+    //stopButton.addListener(this);
+    //loadButton.addListener(this);
+    //volumeSlider.addListener(this);
+    //speedSlider.addListener(this);
+    //positionSlider.addListener(this);
+    //fastForwardButton.addListener(this);
+    //rewindButton.addListener(this);
 
     volumeSlider.setRange(0,1);
     positionSlider.setRange(0,1);
@@ -79,15 +111,17 @@ void DeckGUI::paint (juce::Graphics& g)
 void DeckGUI::resized()
 {
     double rowHeight = getHeight()/10;
-    playButton.setBounds(0,0,getWidth(), rowHeight);
-    stopButton.setBounds(0, rowHeight, getWidth(), rowHeight);
-    waveformDisplay.setBounds(0, rowHeight*2, getWidth(), rowHeight*2);
-    loadButton.setBounds(0, rowHeight*4, getWidth(), rowHeight);
-    volumeSlider.setBounds(0, rowHeight*6, getWidth(), rowHeight);
-    speedSlider.setBounds(0, rowHeight*7, getWidth(), rowHeight);
-    positionSlider.setBounds(0, rowHeight*8, getWidth(), rowHeight);
-    rewindButton.setBounds(0, rowHeight*9, getWidth()/3, rowHeight);
-    fastForwardButton.setBounds(getWidth()/2, rowHeight*9, getWidth()/3, rowHeight);
+    waveformDisplay.setBounds(0, 0, getWidth(), getHeight()*0.3);
+    playButton.setBounds(getWidth()*0.2,getHeight()*0.32,getWidth()*0.2, getHeight()*0.15);
+    stopButton.setBounds((getWidth()*0.6), getHeight()*0.32, getWidth()*0.2, getHeight()*0.15);
+    volumeSlider.setBounds(getWidth()*0.2, getHeight()*0.45, getWidth()/8, getHeight()*0.5);
+    speedSlider.setBounds(getWidth()*0.44, getHeight()*0.45, getWidth()/8, getHeight()*0.5);
+    positionSlider.setBounds(getWidth()*0.68, getHeight()*0.45, getWidth()/8, getHeight()*0.5);
+    rewindButton.setBounds(getWidth()*0.05, getHeight()*0.50, getWidth()*0.1, getHeight()*0.2);
+
+
+//    fastForwardButton.setBounds(getWidth()/2, rowHeight*9, getWidth()/3, rowHeight);
+    //loadButton.setBounds(0, rowHeight*4, getWidth(), rowHeight);
 
 }
 
