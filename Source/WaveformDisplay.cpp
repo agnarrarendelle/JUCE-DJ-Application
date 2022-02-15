@@ -36,10 +36,10 @@ void WaveformDisplay::paint (juce::Graphics& g)
        drawing code..
     */
 
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
+    g.fillAll (juce::Colours::black);   // clear the background
 
     g.setColour (juce::Colours::grey);
-    g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
+    g.drawRect (getLocalBounds(), 3);   // draw an outline around the component
     g.setColour (juce::Colours::red);
 
     if(isFileLoaded){
@@ -53,6 +53,10 @@ void WaveformDisplay::paint (juce::Graphics& g)
         );
         g.setColour(juce::Colours::lightgreen);
         g.drawRect(localPosition * getWidth(), 0, 1, getHeight());
+        g.drawRect(localPosition * getWidth(), 0, 4, getHeight());
+        g.drawRect(localPosition * getWidth(), 0, 7, getHeight());
+
+
     }else{
         g.setFont (20.0f);
         g.drawText ("File not loaded...", getLocalBounds(),
