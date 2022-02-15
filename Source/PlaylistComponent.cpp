@@ -17,13 +17,12 @@ deckGUIGroup(_deckGUIGroup),
 playlistFilePath("./play_list_file.txt")
 
 {
-    tableComponent.getHeader().addColumn("Track Name", 1, 400);
+    tableComponent.getHeader().addColumn("Track Name", 1, 590);
     tableComponent.getHeader().addColumn("Track Type", 2, 100);
     tableComponent.getHeader().addColumn("", 3, 100);
     tableComponent.getHeader().addColumn("", 4, 100);
 
     tableComponent.setModel(this);
-
     addAndMakeVisible(tableComponent);
     addAndMakeVisible(playlistSearchField);
     playlistSearchField.setTextToShowWhenEmpty("Search for a song...", juce::Colours::white);
@@ -54,6 +53,7 @@ void PlaylistComponent::paint (juce::Graphics& g)
     g.setFont (14.0f);
     g.drawText ("PlaylistComponent", getLocalBounds(),
                 juce::Justification::centred, true);   // draw some placeholder text
+    //setColour(juce::ListBox::backgroundColourId, juce::Colours::darkblue);
 }
 
 void PlaylistComponent::resized()
@@ -77,7 +77,7 @@ void PlaylistComponent::paintRowBackground(
 )
 {
     if(rowIsSelected){
-        g.fillAll(juce::Colours::orange);
+        g.fillAll(juce::Colours::lightblue);
     }else{
         g.fillAll(juce::Colours::darkgrey);
     }
@@ -92,7 +92,8 @@ void PlaylistComponent::paintCell(
         bool rowIsSelected
 )
 {
-
+    g.setFont(juce::Font{(float)height, juce::Font::bold});
+    //g.setColour(juce::Colours::red);
     switch (columnId) {
         case 1:{
 

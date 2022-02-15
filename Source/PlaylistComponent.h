@@ -60,7 +60,6 @@ public:
             bool isRowSelected,
             juce::Component* existingComponentToUpdate
     ) override;
-
     void buttonClicked(juce::Button*) override;
 
     bool isInterestedInFileDrag (const juce::StringArray &files) override;
