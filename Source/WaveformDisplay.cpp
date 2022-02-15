@@ -40,7 +40,7 @@ void WaveformDisplay::paint (juce::Graphics& g)
 
     g.setColour (juce::Colours::grey);
     g.drawRect (getLocalBounds(), 3);   // draw an outline around the component
-    g.setColour (juce::Colours::red);
+    g.setColour (juce::Colours::mediumseagreen);
 
     if(isFileLoaded){
         audioThumbnail.drawChannel(
@@ -51,14 +51,14 @@ void WaveformDisplay::paint (juce::Graphics& g)
                 0,
                 1.0f
         );
-        g.setColour(juce::Colours::lightgreen);
+        g.setColour(juce::Colours::lightblue);
         g.drawRect(localPosition * getWidth(), 0, 1, getHeight());
         g.drawRect(localPosition * getWidth(), 0, 4, getHeight());
         g.drawRect(localPosition * getWidth(), 0, 7, getHeight());
 
 
     }else{
-        g.setFont (20.0f);
+        g.setFont (juce::Font{20.0f, juce::Font::bold});
         g.drawText ("File not loaded...", getLocalBounds(),
                     juce::Justification::centred, true);   // draw some placeholder text
     }
