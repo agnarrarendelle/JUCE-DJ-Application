@@ -119,10 +119,10 @@ void DeckGUI::resized()
     speedSlider.setBounds(getWidth()*0.44, getHeight()*0.45, getWidth()/8, getHeight()*0.5);
     positionSlider.setBounds(getWidth()*0.68, getHeight()*0.45, getWidth()/8, getHeight()*0.5);
     rewindButton.setBounds(getWidth()*0.05, getHeight()*0.50, getWidth()*0.1, getHeight()*0.2);
+    fastForwardButton.setBounds(getWidth()*0.85, getHeight()*0.50, getWidth()*0.1, getHeight()*0.2);
+    //loadButton.setBounds(getWidth()*0.68, getHeight()*0.50, getWidth()*0.1, getHeight()*0.2);
 
 
-//    fastForwardButton.setBounds(getWidth()/2, rowHeight*9, getWidth()/3, rowHeight);
-    //loadButton.setBounds(0, rowHeight*4, getWidth(), rowHeight);
 
 }
 

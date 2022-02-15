@@ -32,7 +32,7 @@ public:
     ~DeckGUI() override;
 
     void paint (juce::Graphics&) override;
-    void resized() override;
+    void re d() override;
 
     //implement Button::Listener pure virtual function
     void buttonClicked(juce::Button*) override;
@@ -55,8 +55,8 @@ private:
     juce::TextButton playButton{"Play"};
     juce::TextButton stopButton{"Stop"};
     juce::TextButton loadButton{"Load"};
-    juce::TextButton fastForwardButton{">> 3 seconds"};
-    juce::TextButton rewindButton{"3 seconds <<"};
+    juce::TextButton fastForwardButton{">>"};
+    juce::TextButton rewindButton{"<<"};
     juce::Slider volumeSlider{"gain"};
     juce::Slider speedSlider{"speed"};
     juce::Slider positionSlider{"position"};
