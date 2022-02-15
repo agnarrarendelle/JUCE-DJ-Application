@@ -28,7 +28,9 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player,
     allButtons.push_back(&fastForwardButton);
     allButtons.push_back(&rewindButton);
 
+    //volumeSlider.setLookAndFeel(&lookAndFeel);
     for(const auto& slider: allSliders){
+        slider->setLookAndFeel(&lookAndFeel);
         slider->setSliderStyle(juce::Slider::SliderStyle::Rotary);
         slider->setTextBoxStyle(juce::Slider::TextBoxBelow, false, 80, 40);
         addAndMakeVisible(*slider);
@@ -62,7 +64,6 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player,
     //addAndMakeVisible(fastForwardButton);
     //addAndMakeVisible(rewindButton);
     addAndMakeVisible(waveformDisplay);
-
 
     //playButton.addListener(this);
     //stopButton.addListener(this);
