@@ -24,12 +24,13 @@ player2(_player2),
 player3(_player3)
 
 {
-    addAndMakeVisible(deckGUI1);
-    addAndMakeVisible(deckGUI2);
-    addAndMakeVisible(deckGUI3);
+
     addDeckAndPlayer(&deckGUI1);
     addDeckAndPlayer(&deckGUI2);
     addDeckAndPlayer(&deckGUI3);
+    for(const auto& eachDeck: allDecks){
+        addAndMakeVisible(*eachDeck);
+    }
 }
 
 DeckGUIGroup::~DeckGUIGroup()
@@ -60,18 +61,22 @@ void DeckGUIGroup::resized()
 {
     // This method is where you should set the bounds of any child
     // components that your component contains..
-    deckGUI1.setBounds(0,0,getWidth(), getHeight()/3);
-    deckGUI2.setBounds(0,getHeight()/3, getWidth(), getHeight()/3);
-    deckGUI3.setBounds(0, (getHeight()/3)*2, getWidth(), getHeight()/3);
 
+
+    int height = getHeight()/3;
+    int initialY = 0;
+    for(const auto& eachDeck: allDecks){
+        eachDeck->setBounds(0, initialY, getWidth(), height);
+        initialY += height;
+    }
 }
 
 void DeckGUIGroup::addDeckAndPlayer(DeckGUI *deckGUI) {
-    allDeckStatus.insert(deckGUI);
+    allDecks.insert(deckGUI);
 }
 
 void DeckGUIGroup::loadURLintoOnePlayer(juce::File & file) {
-    for(auto const& eachDeck: allDeckStatus){
+    for(auto const& eachDeck: allDecks){
         if( eachDeck->isTrackLoaded() == false || eachDeck->isTrackEnded()){
             //eachDeck->isPlaying = true;
             eachDeck->loadURL(file);

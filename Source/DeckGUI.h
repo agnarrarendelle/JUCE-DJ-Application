@@ -32,7 +32,7 @@ public:
     ~DeckGUI() override;
 
     void paint (juce::Graphics&) override;
-    void re d() override;
+    void resized() override;
 
     //implement Button::Listener pure virtual function
     void buttonClicked(juce::Button*) override;
@@ -67,5 +67,9 @@ private:
     std::vector<juce::Slider*> allSliders;
     std::vector<juce::TextButton*> allButtons;
 
+    void slidersInitialization();
+    void buttonsInitialization();
+    void fastForwardButtonClicked();
+    void rewindButtonClicked();
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DeckGUI)
 };

@@ -43,6 +43,6 @@ private:
     DeckGUI deckGUI2{&player2, formatManager, thumbnailCache};
     DeckGUI deckGUI3{&player3, formatManager, thumbnailCache};
 
-    std::set<DeckGUI*> allDeckStatus;
+    std::set<DeckGUI*> allDecks;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DeckGUIGroup)
 };
