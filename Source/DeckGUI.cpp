@@ -64,27 +64,42 @@ void DeckGUI::paint (juce::Graphics& g)
 
 void DeckGUI::resized()
 {
-    double rowHeight = getHeight()/10;
     waveformDisplay.setBounds(0, 0, getWidth(), getHeight()*0.3);
-    playButton.setBounds(getWidth()*0.2,getHeight()*0.32,getWidth()*0.2, getHeight()*0.15);
-    stopButton.setBounds((getWidth()*0.6), getHeight()*0.32, getWidth()*0.2, getHeight()*0.15);
-    volumeSlider.setBounds(getWidth()*0.2, getHeight()*0.45, getWidth()/8, getHeight()*0.5);
-    speedSlider.setBounds(getWidth()*0.44, getHeight()*0.45, getWidth()/8, getHeight()*0.5);
-    positionSlider.setBounds(getWidth()*0.68, getHeight()*0.45, getWidth()/8, getHeight()*0.5);
-    rewindButton.setBounds(getWidth()*0.05, getHeight()*0.50, getWidth()*0.1, getHeight()*0.2);
-    fastForwardButton.setBounds(getWidth()*0.85, getHeight()*0.50, getWidth()*0.1, getHeight()*0.2);
-    //loadButton.setBounds(getWidth()*0.68, getHeight()*0.50, getWidth()*0.1, getHeight()*0.2);
+    buttonsPositioning();
+    slidersPositioning();
 
 
 
 }
 
+void DeckGUI::slidersPositioning() {
+    double sliderY = getHeight()*0.45;
+    double sliderWidth = getWidth()/8;
+    double sliderHeight = getHeight()*0.5;
+    volumeSlider.setBounds(getWidth()*0.2, sliderY, sliderWidth, sliderHeight);
+    speedSlider.setBounds(getWidth()*0.44, sliderY, sliderWidth, sliderHeight);
+    positionSlider.setBounds(getWidth()*0.68, sliderY, sliderWidth, sliderHeight);
+}
+
+void DeckGUI::buttonsPositioning() {
+    double playAndStopY = getHeight()*0.32;
+    double playAndStopWidth = getWidth()*0.2;
+    double playAndStopHeight = getHeight()*0.15;
+
+    playButton.setBounds(getWidth()*0.2,playAndStopY,playAndStopWidth, playAndStopHeight);
+    stopButton.setBounds(getWidth()*0.6, playAndStopY, playAndStopWidth, playAndStopHeight);
+    double rewindAndFastY = getHeight()*0.50;
+    double rewindAndFastWidth = getWidth()*0.1;
+    double rewindAndFastHeight = getHeight()*0.2;
+    rewindButton.setBounds(getWidth()*0.05, rewindAndFastY, rewindAndFastWidth, rewindAndFastHeight);
+    fastForwardButton.setBounds(getWidth()*0.85, rewindAndFastY, rewindAndFastWidth, rewindAndFastHeight);
+}
 void DeckGUI::buttonClicked(juce::Button * button) {
     if(button == &playButton){
 
         player->start();
     }else if(button == &stopButton){
-        isLoaded = false;
+        setIsLoaded(false);
         player->stop();
     }else if(button == &fastForwardButton){
         fastForwardButtonClicked();
@@ -109,8 +124,10 @@ bool DeckGUI::isInterestedInFileDrag(const juce::StringArray &files){
 }
 void DeckGUI::filesDropped(const juce::StringArray &files, int x, int y){
     if(files.size() == 1){
-        juce::URL fileURL{juce::File{files[0]}};
-        player->loadURL(fileURL);
+        juce::File file{files[0]};
+        if(canFileBeLoaded()){
+            loadURL(file);
+        }
     }
 }
 
@@ -125,10 +142,12 @@ void DeckGUI::loadURL(juce::File &file) {
     trackStatesInitialized();
     player->loadURL(fileURL);
     waveformDisplay.loadURL(fileURL);
-    isLoaded = true;
+    setIsLoaded(true);
 }
 
-
+void DeckGUI::setIsLoaded(bool value) {
+    isLoaded = value;
+}
 
 bool DeckGUI::isTrackLoaded() {
     return isLoaded;
@@ -193,4 +212,8 @@ void DeckGUI::rewindButtonClicked() {
     }else{
         player->setPosition(newPosition);
     }
+}
+
+bool DeckGUI::canFileBeLoaded() {
+    return !isTrackLoaded() || isTrackEnded();
 }

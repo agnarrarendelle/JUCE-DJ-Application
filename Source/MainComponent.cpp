@@ -30,17 +30,7 @@ MainComponent::MainComponent()
     allPlayers.push_back(&player2);
     allPlayers.push_back(&player3);
 
-//
-//    playButton.addListener(this);
-//    stopButton.addListener(this);
-//    loadButton.addListener(this);
-//    volumeSlider.addListener(this);
-//    gainSlider.addListener(this);
-//    speedSlider.addListener(this);
-//    positionSlider.addListener(this);
-//
-//    gainSlider.setRange(0,1);
-//    positionSlider.setRange(0,1);
+
 }
 
 MainComponent::~MainComponent()
@@ -61,13 +51,10 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     // For more details, see the help for AudioProcessor::prepareToPlay()
     isPlaying = true;
 
-    gain = 0.5;
     mixerSource.prepareToPlay(samplesPerBlockExpected,sampleRate);
     for( auto& player:allPlayers){
         player->prepareToPlay(samplesPerBlockExpected,sampleRate);
     }
-//    player1.prepareToPlay(samplesPerBlockExpected, sampleRate);
-//    player2.prepareToPlay(samplesPerBlockExpected, sampleRate);
 
 
     mixerSource.addInputSource(&player1, false);
@@ -87,26 +74,10 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
     if(!isPlaying){
         bufferToFill.clearActiveBufferRegion();
     }else{
-        //transportSource.getNextAudioBlock(bufferToFill);
         mixerSource.getNextAudioBlock(bufferToFill);
 
-//        float* leftChannel = bufferToFill.buffer->getWritePointer(0,
-//                                                                  bufferToFill.startSample);
-//        float* rightChannel = bufferToFill.buffer->getWritePointer(1,
-//                                                                   bufferToFill.startSample);
-//        for(int i = 0; i < bufferToFill.numSamples; ++i){
-//            //float sample = fmod(phase, 0.2f);
-//            float sample = sin(phase) * gain * 0.125;
-//            //dynamicPhase += 0.0000005f;
-//            leftChannel[i] = sample;
-//            rightChannel[i] = sample;
-//
-//            phase += dynamicPhase;
-//        }
     }
 
-
-    //bufferToFill.clearActiveBufferRegion();
 }
 
 void MainComponent::releaseResources()
@@ -120,8 +91,7 @@ void MainComponent::releaseResources()
     for(DJAudioPlayer* player:allPlayers){
         player->releaseResources();
     }
-//    player1.releaseResources();
-//    player2.releaseResources();
+
 }
 
 //==============================================================================

@@ -108,8 +108,8 @@ void PlaylistComponent::paintCell(
             break;
         }
         case 2:{
-            juce::File fileInfo = fileStatus.at(trackTitles[rowNumber]);
-            g.drawText(fileInfo.getFileExtension(),
+            juce::File file = trackNameAndFile.at(trackTitles[rowNumber]);
+            g.drawText(file.getFileExtension(),
                        2,
                        0,
                        width-4,
@@ -133,25 +133,15 @@ juce::Component *PlaylistComponent::refreshComponentForCell(
 )
 {
     juce::TextButton* btn;
-    if(columnId == 3){
-        if(existingComponentToUpdate == nullptr){
-            btn = new juce::TextButton{"play"};
-            juce::String id{std::to_string(rowNumber)};
-            btn->setComponentID(id);
-            btn->addListener(this);
-            existingComponentToUpdate = btn;
-        }
-    }else if(columnId == 4){
-        if(existingComponentToUpdate == nullptr){
-            btn = new juce::TextButton{"remove"};
-            juce::String id{std::to_string(rowNumber)};
-            btn->setComponentID(id);
-            btn->addListener(this);
-            existingComponentToUpdate = btn;
+    if(existingComponentToUpdate == nullptr){
+        if(columnId == 3){
+            std::string buttonType = "load";
+            existingComponentToUpdate = createNewButton(buttonType, rowNumber);
+        }else if(columnId == 4){
+            std::string buttonType = "remove";
+            existingComponentToUpdate = createNewButton(buttonType, rowNumber);
         }
     }
-
-
     return existingComponentToUpdate;
 }
 
@@ -160,14 +150,11 @@ juce::Component *PlaylistComponent::refreshComponentForCell(
 void PlaylistComponent::buttonClicked(juce::Button* button) {
     std::string buttonText = button->getButtonText().toStdString();
     int id = std::stoi(button->getComponentID().toStdString());
-    if(buttonText == "play"){
-        std::cout<<"button clicked "<< trackTitles[id] <<std::endl;
-        deckGUIGroup.loadURLintoOnePlayer(fileStatus.at(trackTitles[id]));
+    if(buttonText == "load"){
+        deckGUIGroup.loadURLintoOnePlayer(trackNameAndFile.at(trackTitles[id]));
     }
     else if(buttonText == "remove"){
-        std::cout<<"track path: "<<trackTitles[id]<<std::endl;
-        allTracks.erase(fileStatus[trackTitles[id]].getFullPathName());
-        //fileStatus.erase(trackTitles[id]);
+        allTrackFiles.erase(trackNameAndFile[trackTitles[id]].getFullPathName());
         allTrackTitles[trackTitles[id]] = false;
         trackTitles.erase(trackTitles.begin()+id);
         updatePlayList();
@@ -183,29 +170,26 @@ bool PlaylistComponent::isInterestedInFileDrag(const juce::StringArray &files) {
         if(reader == nullptr){
             return false;
         }else{
-            juce::URL fileRead{eachFile};
-            std::cout<<"file name "<< eachFile.getFileName()<<std::endl;
-            std::cout<<"file type "<< eachFile.getFileExtension()<<std::endl;
             return true;
         }
     }
 }
 void PlaylistComponent::filesDropped (const juce::StringArray &files, int x, int y){
     for(auto& fileName: files){
-            //juce::File eachFile{fileName};
-            //std::cout<<"file is "<< eachFile.getFullPathName()<<std::endl;
+        //iterates through all dropped files and stores its information in different
+        //data structures used to display the playlist cell
             convertLineToFileEntry(fileName.toStdString());
     }
+    //after storing all information of the dropped files, refresh the playlist
     updatePlayList();
 }
 
 void PlaylistComponent::savePlaylist()
 {
     std::ofstream outFile(playlistFilePath);
-    for (const auto &eachFile : allTracks){
+    for (const auto &eachFile : allTrackFiles){
         outFile << eachFile.getFullPathName() << "\n";
     }
-    // the important part
 }
 
 void PlaylistComponent::loadPlaylist() {
@@ -217,14 +201,14 @@ void PlaylistComponent::loadPlaylist() {
     updatePlayList();
 }
 
-void PlaylistComponent::convertLineToFileEntry(std::string line) {
-    juce::File eachFile{line};
+void PlaylistComponent::convertLineToFileEntry(std::string filePath) {
+    juce::File eachFile{filePath};
     //std::cout<<"file is "<< eachFile.getFullPathName()<<std::endl;
-    if(allTracks.count(eachFile) == 0){
+    if(allTrackFiles.count(eachFile) == 0){
         trackTitles.push_back(eachFile.getFileName().toStdString());
         allTrackTitles.insert({eachFile.getFileName().toStdString(), true});
-        allTracks.insert(eachFile);
-        fileStatus.insert({eachFile.getFileName().toStdString(), eachFile});
+        allTrackFiles.insert(eachFile);
+        trackNameAndFile.insert({eachFile.getFileName().toStdString(), eachFile});
     }
 }
 
@@ -236,18 +220,14 @@ void PlaylistComponent::updatePlayList() {
 void PlaylistComponent::textEditorTextChanged(juce::TextEditor & textEditor) {
     std::string searchResult = textEditor.getText().toStdString();
     std::cout<<searchResult<<std::endl;
-    if(isSearchFieldEmpty()){
-        std::cout<<"empty"<<std::endl;
-    }
     if(!isSearchFieldEmpty()){
         putSearchResultIntoPlaylist(searchResult);
     }else{
         for(auto& eachTrackTitle: allTrackTitles){
-
             for(int i = 0; i < trackTitles.size(); i++){
                 if(std::find(trackTitles.begin(), trackTitles.end(), eachTrackTitle.first)==trackTitles.end() && eachTrackTitle.second == true){
                     trackTitles.push_back(eachTrackTitle.first);
-                    allTracks.insert(fileStatus[eachTrackTitle.first]);
+                    allTrackFiles.insert(trackNameAndFile[eachTrackTitle.first]);
                 }
             }
         }
@@ -262,9 +242,8 @@ bool PlaylistComponent::isSearchFieldEmpty() {
 void PlaylistComponent::putSearchResultIntoPlaylist(std::string &result) {
     for(int i = 0; i < trackTitles.size(); i++){
         if(trackTitles[i].find(result) == std::string::npos){
-            juce::File& file = fileStatus[trackTitles[i]];
-            allTracks.erase(fileStatus[trackTitles[i]]);
-            //fileStatus.erase(trackTitles[i]);
+            juce::File& file = trackNameAndFile[trackTitles[i]];
+            allTrackFiles.erase(trackNameAndFile[trackTitles[i]]);
             trackTitles.erase(trackTitles.begin() + i);
         }
     }
@@ -272,4 +251,11 @@ void PlaylistComponent::putSearchResultIntoPlaylist(std::string &result) {
 
 }
 
+juce::TextButton *PlaylistComponent::createNewButton(std::string & name, int rowNumber) {
+    juce::TextButton* btn = new juce::TextButton{name};
+    juce::String id{std::to_string(rowNumber)};
+    btn->setComponentID(id);
+    btn->addListener(this);
+    return btn;
+}
 

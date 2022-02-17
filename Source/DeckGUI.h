@@ -51,6 +51,8 @@ public:
     bool isTrackEnded();
 
     void trackStatesInitialized();
+
+    bool canFileBeLoaded();
 private:
     juce::TextButton playButton{"Play"};
     juce::TextButton stopButton{"Stop"};
@@ -67,9 +69,12 @@ private:
     std::vector<juce::Slider*> allSliders;
     std::vector<juce::TextButton*> allButtons;
 
+    void setIsLoaded(bool);
     void slidersInitialization();
     void buttonsInitialization();
     void fastForwardButtonClicked();
     void rewindButtonClicked();
+    void buttonsPositioning();
+    void slidersPositioning();
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DeckGUI)
 };

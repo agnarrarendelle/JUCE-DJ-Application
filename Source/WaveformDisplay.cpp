@@ -52,9 +52,10 @@ void WaveformDisplay::paint (juce::Graphics& g)
                 1.0f
         );
         g.setColour(juce::Colours::lightblue);
-        g.drawRect(localPosition * getWidth(), 0, 1, getHeight());
-        g.drawRect(localPosition * getWidth(), 0, 4, getHeight());
-        g.drawRect(localPosition * getWidth(), 0, 7, getHeight());
+        for(int i = 1; i <= 7; i+=3){
+            g.drawRect(localPosition * getWidth(), 0, i, getHeight());
+        }
+
 
 
     }else{
@@ -74,11 +75,6 @@ void WaveformDisplay::resized()
 void WaveformDisplay::loadURL(juce::URL audioURL) {
     audioThumbnail.clear();
     isFileLoaded = audioThumbnail.setSource(new juce::URLInputSource(audioURL));
-    if(isFileLoaded){
-        std::cout<<"Waveform URL loaded"<<std::endl;
-    }else{
-        std::cout<<"Waveform URL failed to be loaded"<<std::endl;
-    }
 }
 
 void WaveformDisplay::changeListenerCallback(juce::ChangeBroadcaster *source) {

@@ -71,8 +71,8 @@ private:
     juce::TableListBox tableComponent;
     std::vector<std::string> trackTitles;
     std::map<std::string, bool> allTrackTitles;
-    std::set<juce::File> allTracks;
-    std::map<std::string, juce::File> fileStatus;
+    std::set<juce::File> allTrackFiles;
+    std::map<std::string, juce::File> trackNameAndFile;
     DeckGUIGroup& deckGUIGroup;
     std::string playlistFilePath;
     juce::TextEditor playlistSearchField{"search field"};
@@ -83,5 +83,6 @@ private:
     void convertLineToFileEntry(std::string);
     void updatePlayList();
     bool isSearchFieldEmpty();
+    juce::TextButton* createNewButton(std::string&, int);
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PlaylistComponent)
 };

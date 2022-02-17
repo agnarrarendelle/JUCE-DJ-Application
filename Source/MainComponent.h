@@ -45,8 +45,7 @@ private:
 
     juce::MixerAudioSource mixerSource;
 
-    double ff;
-    double gain;
+
     bool isPlaying;
     DeckGUIGroup deckGUIGroup{formatManager, thumbnailCache, player1, player2, player3};
     PlaylistComponent playlistComponent{formatManager, deckGUIGroup};
